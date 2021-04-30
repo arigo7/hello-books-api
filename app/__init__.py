@@ -25,6 +25,11 @@ def create_app(test_config=None):
     # already connected to the db
     # if we design more models, we'll import new models here too
 
-    from .routes import hello_world_bp
-    app.register_blueprint(hello_world_bp)
+    # these is for the responses created before (hello_wold, not books)
+    # from .routes import hello_world_bp
+    # app.register_blueprint(hello_world_bp)
+    # return app
+
+    from .routes import books_bp
+    app.register_blueprint(books_bp)
     return app
