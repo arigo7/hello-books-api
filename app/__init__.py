@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate 
 
-db = SQLAlchemy()
+db = SQLAlchemy()  
 migrate = Migrate()
 
 # he used ada_books_develovement vs hello_books_development
@@ -11,12 +11,13 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     # DB Configuration - here I give it my connection string
+    # sql alchemy is going to know about models through this:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://postgres:postgres@localhost:5432/hello_books_development"
 
     # initializing my sqlalchemy object - telling it this is the app to 
     # work with - 
-    db.init_app(app)  
+    db.init_app(app)  # instructions? method check it out
     migrate.init_app(app, db) # app to work with, this is the way to get to the db
 
     from app.models.book import Book  # this makes it visible - we have to import
