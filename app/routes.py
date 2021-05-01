@@ -9,26 +9,35 @@ books_bp = Blueprint("books", __name__, url_prefix="/books")
 @books_bp.route("/<book_id>", methods=["DELETE"])
 def delete_book(book_id):
     book = Book.query.get(book_id)
+
+    if book:
     # form_data = request.get_json() # save user input form_data as json format 
     # book.title = form_data["title"] # updating model? title fieldlanguage?
     # book.description = form_data["description"] # updating model description field for book = book_id
-    db.session.delete(book)
-    db.session.commit()
-    return {"success": True,
+        db.session.delete(book)
+        db.session.commit()
+        return {"success": True,
             "message": f"Book #{book.id}, successfully deleted"
             }, 201
+    
+    return {"success": False,
+        "message": f"Book #{book_id} was not found"
+        }, 404
 
 @books_bp.route("/<book_id>", methods=["PUT"])
 def update_book(book_id):
     book = Book.query.get(book_id)
-    form_data = request.get_json() # save user input form_data as json format 
-    book.title = form_data["title"] # updating model? title fieldlanguage?
-    book.description = form_data["description"] # updating model description field for book = book_id
-    db.session.commit()
-
-    return {"success": True,
-            "message": f"Book #{book.id}, successfully updated"
-            }, 201
+    if book: # successful updating book
+        form_data = request.get_json() # save user input form_data as json format 
+        book.title = form_data["title"] # updating model? title fieldlanguage?
+        book.description = form_data["description"] # updating model description field for book = book_id
+        db.session.commit()
+        return {"success": True,
+                "message": f"Book #{book.id}, successfully updated"
+                }, 201
+    return {"success": False,
+            "message": f"Book #{book_id} was not found"
+            }, 404
 
 @books_bp.route("/<book_id>", methods=["GET"], strict_slashes = False)
 def handle_single_book(book_id):
