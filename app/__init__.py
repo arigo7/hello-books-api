@@ -1,19 +1,27 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate 
+from dotenv import load_dotenv
+import os
 
 db = SQLAlchemy()  
 migrate = Migrate()
+load_dotenv()
 
 # he used ada_books_develovement vs hello_books_development
 # postgresql+psycopg2://postgres:postgres@localhost:5432/hello_books_development
 def create_app(test_config=None):
     app = Flask(__name__)
-
     # DB Configuration - here I give it my connection string
     # sql alchemy is going to know about models through this:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://postgres:postgres@localhost:5432/hello_books_development"
+    
+    if not test_config: # if test_config flag is None or False, connect to regular (dev) database
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+            "SQLALCHEMY_DATABASE_URI")
+    else: # otherwise, connect to test_database
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+            "SQLALCHEMY_TEST_DATABASE_URI") 
 
     # initializing my sqlalchemy object - telling it this is the app to 
     # work with - 

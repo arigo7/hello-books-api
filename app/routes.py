@@ -29,7 +29,7 @@ def update_book(book_id):
     book = Book.query.get(book_id)
     if book: # successful updating book
         form_data = request.get_json() # save user input form_data as json format 
-        book.title = form_data["title"] # updating model? title fieldlanguage?
+        book.title = form_data["title"] # updating model? title field language?
         book.description = form_data["description"] # updating model description field for book = book_id
         db.session.commit()
         return {"success": True,
